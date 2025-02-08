@@ -1,0 +1,6 @@
+@SisandBackend_HostAddress = http://localhost:5121
+
+GET {{SisandBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
