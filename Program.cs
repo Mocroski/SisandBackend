@@ -4,19 +4,18 @@ internal class Program
     private static async Task Main(string[] args)
     {
         var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
+            .AddJsonFile("appsettings.json", false, true)
 #if DEBUG
-            .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
+                 .AddJsonFile("appsettings.Development.json", true, true)
 #else
-            .AddJsonFile("appsettings.Production.json", optional: true, reloadOnChange: true)
+                 .AddJsonFile("appsettings.Production.json", true, true)
 #endif
-            .AddEnvironmentVariables()
-            .Build();
+                 .Build();
 
-        ShowConfig(configuration);
 
         var builder = CreateHostBuilder(args, configuration);
+
         var host = builder.Build();
 
         host.Start();
@@ -34,14 +33,7 @@ internal class Program
                 webBuilder
                     .UseStartup<Startup>()
                     .UseContentRoot(Directory.GetCurrentDirectory())
-                    .UseIISIntegration();
+                    .UseIISIntegration()
+                    .ConfigureKestrel(options => options.ListenAnyIP(5000));
             });
-
-    private static void ShowConfig(IConfiguration config)
-    {
-        foreach (var pair in config.AsEnumerable())
-        {
-            Console.WriteLine($"{pair.Key} - {pair.Value}");
-        }
-    }
 }
