@@ -9,7 +9,7 @@ using SisandBackend.Shared.Utils;
 namespace SisandBackend.Controllers.UserController;
 
 [ApiController]
-[Authorize]
+[Authorize(AuthenticationSchemes = "Bearer")]
 public class UserController : ControllerBase
 {
     #region Consts
